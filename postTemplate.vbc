@@ -65,6 +65,6 @@ StructuredDD is a damage detection system which enables users to register a pseu
 [*]PurplePoot who thought of bucket-based damage detection systems and created it in the first place, but never released his version.
 [*]Nestharus and Troll-Brain for explaining how to use GetUnitTypeId() for null checks.
 [*]-Kobas- for creating a map submission template, which turned out useful for system submissions as well.
-[*]Vexorian for developing JassHelper. Without vJass, I almost certainly would not still be scripting for wc3.
-[*]The various developers of JNGP including PitzerMike and MindworX. Integrating JassHelper and TESH is a godsend.
+[*]Vexorian for developing JassHelper.
+[*]The various developers of JNGP including PitzerMike and MindworX.
 [/list]
