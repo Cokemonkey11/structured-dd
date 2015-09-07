@@ -1,17 +1,27 @@
 
-//*     API:
-//* boolean ADD_ALL_UNITS: If enabled, a trigger turns on which automatically
-//*     registers all units in the map.
-//* integer BUCKET_SIZE: How many units to add to each 'bucket' - a larger
-//*     bucket will have their trigger refresh less frequently but will be
-//*     more computationally expensive. A good starting value is about 20.
-//* real PER_CLEANUP_TIMEOUT: How many seconds to wait in between each
-//*     scan for empty buckets. This value should be lower if units die often
-//*     in your map. A good starting value is about 60.
-//* static method addHandler: Registers a callback function to the generic
-//*     unit damage event. Example: call StructuredDD.addHandler(function h)
-//* static method add: Adds a unit to a bucket. If ADD_ALL_UNITS is enabled,
-//*     this method need not be used.
+// StructuredDD is a damage detection system for handling the generic "unit is
+// damaged" event response. The API follows:
+//
+//
+//      StructuredDD.addHandler(function f)
+//
+//          * Registers function f as a callback function, which will occur
+//            whenever a unit, which has been added to the system, is damaged.
+//          * In the context of a handler function f, use standard jass natives
+//            like:
+//                - GetTriggerUnit()       - returns the damaged unit
+//                - GetEventDamageSource() - returns the attacking unit
+//                - GetEventDamage()       - returns how much damage was dealt
+//
+//
+//      StructuredDD.add(unit u)
+//
+//          * Manually adds a unit the damage detection system, so that all
+//            damage handlers are called when it receives damage.
+//          * Note that if `ADD_ALL_UNITS` is enabled, there is no need to
+//            manually add a unit.
+//
+//
 library StructuredDD
     globals
 
