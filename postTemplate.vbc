@@ -1,0 +1,70 @@
+
+[size=+1][color=#CCAA00][b]StructuredDD[/b][/color][/size]
+
+[color=#CCAA00][b]Preface:[/b][/color]
+
+StructuredDD is a damage detection system which enables users to register a pseudo-generic "unit damaged" event. Many systems exist to accomplish the same result, but the intended design paradigms represented by StructuredDD make it unique:
+
+[list]
+[*]Code Simplicity: StructuredDD is well commented and is self-documented. The design concept is easy to understand for programmers and JASS users with intermediate experience.
+[*]Fully independent of UnitUserData. Many inexperienced spell programmers use UnitUserData to create their abilities, and I want to ensure that it is always available for that.
+[*]Cohesion: The system does exactly what it intends to do, and nothing more. There are no required libraries, and any additional functionality is handled in separate components.
+[/list]
+
+[color=#CCAA00][b]Design Explanation:[/b][/color]
+
+[list=1]
+[*]User defines one or more [ljass]code[/ljass] to be executed on damage detection
+[*]User indexes units they want to be used for damage detection (alternatively StructuredDD can auto-index all units)
+[*]StructuredDD handles instances of detection triggers, each tied to a "bucket" of units
+[*]StructuredDD automatically checks each trigger periodically if the entire bucket contains null units before destroying the trigger
+[/list]
+
+[color=#CCAA00][b]Limitations:[/b][/color]
+
+[list]
+[*] StructuredDD requires vJass
+[*] There is currently no support for deallocating handlers for dynamic use
+[*] There is currently no support for periodic cleanup timeouts that self-optimize.
+[*] There is currently no support for "long-term" unit buckets built to handle units that aren't removed from the game (for example heroes)
+[*] There is no included "safe" method for damaging a unit - it is trivial for the client to do this in their own handler(s).
+[*] There is no included method to check for physical/spell/code damage - the computational cost for such systems is a higher order of magnitude than the system itself, thus these systems are built as extensions.
+[*] Handlers are added in order to an array and are executed in order. If you have handlers that depend on each other, it is your job to avoid race conditions.
+[/list]
+
+[color=#CCAA00][b]The script:[/b][/color]
+
+[jass]
+{snip}
+[/jass]
+
+[color=#CCAA00][b]Example Test Script:[/b][/color]
+
+[jass]
+{snip}
+[/jass]
+
+[color=#CCAA00][b]Change Log:[/b][/color]
+
+[hidden=list]
+[b]2015.09.07[/b] - fixed up white space and improved documentation
+[b]2013.05.25[/b] - removed UnitAlive declaration and reduced length of processed code using static if
+[b]2013.05.24[/b] - made one small change (StructuredDD extends array) which will reduce the size of the compiled code. This change does not affect the API.
+[b]2013.05.13[/b] - updated the API and documentation
+[b]2013.01.18[/b] - big update - updated API, removed some components, fixed a massive bug. Please note that I have also stopped maintaining the version pastebin mirrors as they were a waste of time to maintain.
+[b]2012.06.03[/b] - Updated the null check to use GetUnitTypeId() which fixes a deindexing bug where DEAD_UNITS_ARE_NULL was false. The script now declares native UnitAlive, thus IsUnitType() has been replaced with UnitAlive(). Will revert this change if it is not recommended.
+[b]2012.06.02[/b] - The periodic cleanup now uses a timer instead of a trigger for efficiency reasons.
+[b]2012.06.01[/b] - Updating the script to follow proper CamelCase. The API has also been changed to reflect only 1 use of addHandler, which takes code as an argument as suggested by fellow hive users. Also fixed two major bugs in the decrement portion of the stack.
+[b]2012.05.30 #2[/b] - Updated submission with additional method and changed constant nomenclature.
+[b]2012.05.30[/b] - Initial submission to Hive: Jass Resources: Submissions
+[/hidden]
+
+[color=#CCAA00][b]Special Thanks:[/b][/color]
+
+[list]
+[*]PurplePoot who thought of bucket-based damage detection systems and created it in the first place, but never released his version.
+[*]Nestharus and Troll-Brain for explaining how to use GetUnitTypeId() for null checks.
+[*]-Kobas- for creating a map submission template, which turned out useful for system submissions as well.
+[*]Vexorian for developing JassHelper. Without vJass, I almost certainly would not still be scripting for wc3.
+[*]The various developers of JNGP including PitzerMike and MindworX. Integrating JassHelper and TESH is a godsend.
+[/list]
