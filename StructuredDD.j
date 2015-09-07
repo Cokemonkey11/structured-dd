@@ -1,8 +1,9 @@
+
 //*     API:
 //* boolean ADD_ALL_UNITS: If enabled, a trigger turns on which automatically
 //*     registers all units in the map.
 //* integer BUCKET_SIZE: How many units to add to each 'bucket' - a larger
-//*     bucket will have their trigger refresh less frequently but will be 
+//*     bucket will have their trigger refresh less frequently but will be
 //*     more computationally expensive. A good starting value is about 20.
 //* real PER_CLEANUP_TIMEOUT: How many seconds to wait in between each
 //*     scan for empty buckets. This value should be lower if units die often
@@ -13,28 +14,28 @@
 //*     this method need not be used.
 library StructuredDD
     globals
-    
+
         //<< BEGIN SETTINGS SECTION
-        
-        //* Set this to true if you want all units in your map to be 
-        //* automatically added to StructuredDD. Otherwise you will have to 
+
+        //* Set this to true if you want all units in your map to be
+        //* automatically added to StructuredDD. Otherwise you will have to
         //* manually add them with StructuredDD.add(u).
         private constant boolean ADD_ALL_UNITS=true
-        
-        //* This is the amount of units that exist in each trigger bucket. 
-        //* This number should be something between 5 and 30. A good starting 
-        //* value will be an estimate of your map's average count of units, 
+
+        //* This is the amount of units that exist in each trigger bucket.
+        //* This number should be something between 5 and 30. A good starting
+        //* value will be an estimate of your map's average count of units,
         //* divided by 10. When in doubt, just use 20.
         private constant integer BUCKET_SIZE=20
-        
-        //* This is how often StructuredDD will search for empty buckets. If 
-        //* your map has units being created and dying often, a lower value 
-        //* is better. Anything between 10 and 180 is good. When in doubt, 
+
+        //* This is how often StructuredDD will search for empty buckets. If
+        //* your map has units being created and dying often, a lower value
+        //* is better. Anything between 10 and 180 is good. When in doubt,
         //* just use 60.
         private constant real PER_CLEANUP_TIMEOUT=60.
-        
+
         //>> END SETTINGS SECTION
-        
+
     endglobals
 
     //* Our bucket struct which contains a trigger and its associated contents.
@@ -43,8 +44,8 @@ library StructuredDD
         trigger trig=CreateTrigger()
         unit array members[BUCKET_SIZE]
     endstruct
-    
-    //* Our wrapper struct. We never intend to actually instanciate "a 
+
+    //* Our wrapper struct. We never intend to actually instanciate "a
     //* StructuredDD", we just use this for a pretty, java-like API :3
     struct StructuredDD extends array
         private static boolexpr array conditions
@@ -52,9 +53,9 @@ library StructuredDD
         private static integer conditionsIndex=-1
         private static integer dbIndex=-1
         private static integer maxDBIndex=-1
-        
+
         //* This method gets a readily available bucket for a unit to be added.
-        //* If the "current" bucket is full, it returns a new one, otherwise 
+        //* If the "current" bucket is full, it returns a new one, otherwise
         //* it just returns the current bucket.
         private static method getBucket takes nothing returns integer
             local integer index=0
@@ -76,11 +77,11 @@ library StructuredDD
             endif
             return -1
         endmethod
-        
-        //* This method is for adding a handler to the system. Whenever a 
-        //* handler is added, damage detection will immediately trigger that 
-        //* handler. There is no way to deallocate a handler, so don't try to 
-        //* do this dynamically (!) Support for handler deallocation is 
+
+        //* This method is for adding a handler to the system. Whenever a
+        //* handler is added, damage detection will immediately trigger that
+        //* handler. There is no way to deallocate a handler, so don't try to
+        //* do this dynamically (!) Support for handler deallocation is
         //* feasible (please contact me)
         public static method addHandler takes code func returns nothing
             local bucket tempDat
@@ -94,7 +95,7 @@ library StructuredDD
                 set index=index+1
             endloop
         endmethod
-        
+
         //* This method adds a unit to the damage detection system. If
         //* ADD_ALL_UNITS is enabled, this method need not be used.
         public static method add takes unit member returns nothing
@@ -105,7 +106,7 @@ library StructuredDD
             set tempDat.members[tempDat.bucketIndex]=member
             call TriggerRegisterUnitEvent(tempDat.trig,member,EVENT_UNIT_DAMAGED)
         endmethod
-        
+
         //* This is just an auxillary function for ADD_ALL_UNITS' implementation
         static if ADD_ALL_UNITS then
             private static method autoAddC takes nothing returns boolean
@@ -113,9 +114,9 @@ library StructuredDD
                 return false
             endmethod
         endif
-        
-        //* This method is used to check if a given bucket is empty (and thus 
-        //* can be deallocated) - this is an auxillary reoutine for the 
+
+        //* This method is used to check if a given bucket is empty (and thus
+        //* can be deallocated) - this is an auxillary reoutine for the
         //* periodic cleanup system.
         private static method bucketIsEmpty takes integer which returns boolean
             local bucket tempDat=thistype.bucketDB[which]
@@ -130,9 +131,9 @@ library StructuredDD
             endloop
             return true
         endmethod
-        
-        //* This method cleans up any empty buckets periodically by checking 
-        //* if it has been fully allocated and then checking if all its 
+
+        //* This method cleans up any empty buckets periodically by checking
+        //* if it has been fully allocated and then checking if all its
         //* members no longer exist.
         private static method perCleanup takes nothing returns nothing
             local integer index=0
@@ -151,8 +152,8 @@ library StructuredDD
                 set index=index+1
             endloop
         endmethod
-        
-        //* This is a initialization function necessary for the setup of 
+
+        //* This is a initialization function necessary for the setup of
         //* StructuredDD.
         private static method onInit takes nothing returns nothing
             local group grp
